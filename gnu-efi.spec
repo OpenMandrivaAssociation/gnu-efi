@@ -1,6 +1,6 @@
 %define name	gnu-efi
-%define version	3.0b
-%define release	2mdk
+%define version	3.0c
+%define release	%mkrel 1
 
 Summary:	Development Libraries and headers for EFI
 Name:		%{name}
@@ -24,6 +24,7 @@ EFI (Extensible Firmware Interface) applications.
 %patch0 -p1 -b .makefile
 
 %build
+# Doesn't like parallel make
 make
 
 %install
