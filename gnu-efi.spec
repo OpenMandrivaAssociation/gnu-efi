@@ -11,6 +11,7 @@ License:	GPL
 URL:		ftp://ftp.hpl.hp.com/pub/linux-ia64/
 Source0:	gnu-efi-%{version}.tar.bz2
 Patch0:		gnu-efi-3.0c-makefile.patch
+BuildRoot:	%{_tmppath}/%{name}-root
 BuildRequires:	binutils
 ExclusiveArch:	ia64 i586
 
