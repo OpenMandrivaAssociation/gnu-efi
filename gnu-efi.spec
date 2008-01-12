@@ -1,6 +1,6 @@
 %define name	gnu-efi
 %define version	3.0c
-%define release	%mkrel 1
+%define release	%mkrel 2
 
 Summary:	Development Libraries and headers for EFI
 Name:		%{name}
