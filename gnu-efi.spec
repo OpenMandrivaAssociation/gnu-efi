@@ -1,13 +1,13 @@
 %define name	gnu-efi
 %define version	3.0c
-%define release	%mkrel 4
+%define release	%mkrel 5
 
 Summary:	Development Libraries and headers for EFI
 Name:		%{name}
 Version:	%{version}
 Release:	%{release}
 Group:		Development/Kernel
-License:	GPL
+License:	GPLv2+
 URL:		ftp://ftp.hpl.hp.com/pub/linux-ia64/
 Source0:	gnu-efi-%{version}.tar.bz2
 Patch0:		gnu-efi-3.0c-makefile.patch
