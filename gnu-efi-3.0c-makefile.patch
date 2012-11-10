@@ -1,0 +1,28 @@
+*** gnu-efi-3.0b/Make.defaults.orig	Thu Oct 20 11:57:19 2005
+--- gnu-efi-3.0b/Make.defaults	Thu Oct 20 11:58:06 2005
+***************
+*** 32,41 ****
+  ARCH	   = $(shell uname -m | sed s,i[3456789]86,ia32,)
+  INCDIR	   = -I. -I$(CDIR)/inc -I$(CDIR)/inc/$(ARCH) -I$(CDIR)/inc/protocol 
+  CPPFLAGS   = -DCONFIG_$(ARCH)
+! CFLAGS	   = -O2 -fpic -Wall -fshort-wchar -fno-strict-aliasing -fno-merge-constants
+  LDFLAGS	   = -nostdlib
+  INSTALL	   = install
+  
+  GCC_VERSION=$(shell $(CROSS_COMPILE)$(CC) -v 2>&1 | fgrep 'gcc version' | cut -f3 -d' ' | cut -f1 -d'.')
+  
+  ifeq ($(ARCH),ia64)
+--- 32,44 ----
+  ARCH	   = $(shell uname -m | sed s,i[3456789]86,ia32,)
+  INCDIR	   = -I. -I$(CDIR)/inc -I$(CDIR)/inc/$(ARCH) -I$(CDIR)/inc/protocol 
+  CPPFLAGS   = -DCONFIG_$(ARCH)
+! CFLAGS	   := -O2 -fpic -Wall -fshort-wchar -fno-strict-aliasing -fno-merge-constants
+  LDFLAGS	   = -nostdlib
+  INSTALL	   = install
+  
++ # Disable constants merging, if available
++ CFLAGS += $(shell if $(CC) -fno-merge-constants -S -o /dev/null -xc /dev/null > /dev/null 2>&1; then echo "-fno-merge-constants"; fi)
++ 
+  GCC_VERSION=$(shell $(CROSS_COMPILE)$(CC) -v 2>&1 | fgrep 'gcc version' | cut -f3 -d' ' | cut -f1 -d'.')
+  
+  ifeq ($(ARCH),ia64)
