@@ -2,7 +2,7 @@ Summary:	Development Libraries and headers for EFI
 Name:		gnu-efi
 Version:	3.0q
 Release:	2
-Group:		Development/System
+Group:		System/Kernel and hardware
 License:	BSD
 URL:		ftp://ftp.hpl.hp.com/pub/linux-ia64
 Source0:	ftp://ftp.hpl.hp.com/pub/linux-ia64/gnu-efi-%{version}.tar.gz
