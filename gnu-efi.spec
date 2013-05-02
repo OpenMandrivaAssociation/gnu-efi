@@ -38,7 +38,7 @@ mv apps/{route80h.efi,modelist.efi} %{buildroot}/boot/efi/EFI/rosa/
 %{_includedir}/efi
 %dir %{_libdir}/gnuefi
 %{_libdir}/gnuefi/*
-%{_libdir}/.a
+%{_libdir}/*.a
 %dir /boot/efi/EFI/rosa/
 %attr(0644,root,root) /boot/efi/EFI/rosa/*.efi
 
