@@ -1,0 +1,3 @@
+# Permissible for now because the entire thing is -devel, but the name
+# should be fixed accordingly eventually
+addFilter("E: devel-file-in-non-devel-package")
