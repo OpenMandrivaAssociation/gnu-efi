@@ -3,12 +3,12 @@
 
 Summary:	Development Libraries and headers for EFI
 Name:		gnu-efi
-Version:	3.0v
-Release:	4
+Version:	3.0.1
+Release:	1
 Group:		System/Kernel and hardware
 License:	BSD
 Url:		http://sourceforge.net/projects/gnu-efi
-Source0:	http://freefr.dl.sourceforge.net/project/gnu-efi/gnu-efi_%{version}.orig.tar.gz
+Source0:	http://freefr.dl.sourceforge.net/project/gnu-efi/gnu-efi-%{version}.tar.bz2
 Source100:	%{name}.rpmlintrc
 # grub legacy makes use of setjmp/longjmp and assumes they're in libgnuefi.a
 # so let's put them back there for now...
