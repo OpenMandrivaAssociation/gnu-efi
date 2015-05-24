@@ -3,7 +3,7 @@
 
 Summary:	Development Libraries and headers for EFI
 Name:		gnu-efi
-Version:	3.0.1
+Version:	3.0.2
 Release:	1
 Group:		System/Kernel and hardware
 License:	BSD
@@ -25,23 +25,22 @@ applications that run under EFI (Extensible Firmware Interface).
 sed -i -e 's,-fpic,-fpic -fuse-ld=bfd,g' Make.defaults
 
 %build
+%setup_compile_flags
+
 # Makefiles aren't SMP clean
 make PREFIX=%{_prefix} LIBDIR=%{_libdir} LD=ld.bfd INSTALLROOT=%{buildroot}
-make -C apps t.efi t2.efi t3.efi t4.efi t5.efi t6.efi printenv.efi t7.efi tcc.efi modelist.efi route80h.efi drv0_use.efi AllocPages.efi FreePages.efi PREFIX=%{_prefix} LIBDIR=%{_libdir} LD=ld.bfd INSTALLROOT=%{buildroot}
+make apps PREFIX=%{_prefix} LIBDIR=%{_libdir} LD=ld.bfd INSTALLROOT=%{buildroot}
 
 %install
-# Unfortunately as of 3.0v, the make install target is completely broken.
-# (3.0u is ok)
-# FIXME revert to using make install as the issue is fixed upstream.
-# make PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot} install
+make PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot} install
+
 mkdir -p %{buildroot}%{_libdir}/gnuefi
-cp -a gnuefi/crt0-efi*.o gnuefi/*.lds %{buildroot}%{_libdir}/gnuefi/
+mv %{buildroot}/%{_libdir}/*.lds %{buildroot}/%{_libdir}/*.o %{buildroot}/%{_libdir}/gnuefi
+
 cp -a */lib*.a %{buildroot}%{_libdir}/
+
 mkdir -p %{buildroot}/boot/efi/EFI/omdv
 cp -a apps/*.efi %{buildroot}/boot/efi/EFI/omdv/
-mkdir -p %{buildroot}%{_includedir}
-rm -f inc/Makefile inc/inc.mak inc/makefile.hdr inc/make.inf
-cp -a inc %{buildroot}%{_includedir}/efi
 
 %files
 %doc README.* ChangeLog
@@ -50,4 +49,3 @@ cp -a inc %{buildroot}%{_includedir}/efi
 %{_libdir}/*.a
 %dir /boot/efi/EFI/omdv/
 %attr(0644,root,root) /boot/efi/EFI/omdv/*.efi
-
