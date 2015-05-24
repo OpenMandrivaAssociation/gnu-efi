@@ -1,6 +1,14 @@
 %define debug_package %{nil}
 %define dirver	%(echo %{version}|sed -e 's/[a-z]//g')
 
+%ifarch x86_64
+%global efiarch x86_64
+%endif
+%ifarch %{ix86}
+%global efiarch ia32
+%endif
+
+
 Summary:	Development Libraries and headers for EFI
 Name:		gnu-efi
 Version:	3.0.2
@@ -36,7 +44,7 @@ mkdir -p %{buildroot}%{_libdir}/gnuefi
 mv %{buildroot}/%{_libdir}/*.lds %{buildroot}/%{_libdir}/*.o %{buildroot}/%{_libdir}/gnuefi
 
 mkdir -p %{buildroot}/boot/efi/EFI/omdv
-cp -a apps/*.efi %{buildroot}/boot/efi/EFI/omdv/
+cp -a %{efiarch}/apps/*.efi %{buildroot}/boot/efi/EFI/omdv/
 
 %files
 %doc README.* ChangeLog
