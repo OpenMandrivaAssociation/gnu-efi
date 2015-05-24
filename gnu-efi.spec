@@ -37,8 +37,6 @@ make PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot} install
 mkdir -p %{buildroot}%{_libdir}/gnuefi
 mv %{buildroot}/%{_libdir}/*.lds %{buildroot}/%{_libdir}/*.o %{buildroot}/%{_libdir}/gnuefi
 
-cp -a */lib*.a %{buildroot}%{_libdir}/
-
 mkdir -p %{buildroot}/boot/efi/EFI/omdv
 cp -a apps/*.efi %{buildroot}/boot/efi/EFI/omdv/
 
@@ -46,6 +44,5 @@ cp -a apps/*.efi %{buildroot}/boot/efi/EFI/omdv/
 %doc README.* ChangeLog
 %{_includedir}/efi
 %{_libdir}/gnuefi
-%{_libdir}/*.a
 %dir /boot/efi/EFI/omdv/
 %attr(0644,root,root) /boot/efi/EFI/omdv/*.efi
