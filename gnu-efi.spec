@@ -50,5 +50,6 @@ cp -a %{efiarch}/apps/*.efi %{buildroot}/boot/efi/EFI/omdv/
 %doc README.* ChangeLog
 %{_includedir}/efi
 %{_libdir}/gnuefi
+%{_libdir}/*.a
 %dir /boot/efi/EFI/omdv/
 %attr(0644,root,root) /boot/efi/EFI/omdv/*.efi
