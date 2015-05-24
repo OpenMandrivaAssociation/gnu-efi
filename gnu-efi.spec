@@ -25,8 +25,6 @@ applications that run under EFI (Extensible Firmware Interface).
 sed -i -e 's,-fpic,-fpic -fuse-ld=bfd,g' Make.defaults
 
 %build
-%setup_compile_flags
-
 # Makefiles aren't SMP clean
 make PREFIX=%{_prefix} LIBDIR=%{_libdir} LD=ld.bfd INSTALLROOT=%{buildroot}
 make apps PREFIX=%{_prefix} LIBDIR=%{_libdir} LD=ld.bfd INSTALLROOT=%{buildroot}
