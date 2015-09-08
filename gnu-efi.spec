@@ -1,3 +1,4 @@
+%define _disable_lto 1
 %define debug_package %{nil}
 %define dirver	%(echo %{version}|sed -e 's/[a-z]//g')
 
@@ -12,7 +13,7 @@
 Summary:	Development Libraries and headers for EFI
 Name:		gnu-efi
 Version:	3.0.2
-Release:	2
+Release:	3
 Group:		System/Kernel and hardware
 License:	BSD
 Url:		http://sourceforge.net/projects/gnu-efi
