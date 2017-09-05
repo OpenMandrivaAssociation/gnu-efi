@@ -9,7 +9,6 @@
 %global efiarch ia32
 %endif
 
-
 Summary:	Development Libraries and headers for EFI
 Name:		gnu-efi
 Version:	3.0.6
@@ -34,6 +33,11 @@ applications that run under EFI (Extensible Firmware Interface).
 sed -i -e 's,-fpic,-fpic -fuse-ld=bfd,g' Make.defaults
 
 %build
+%ifarch %{ix86}
+# (tpg) fix build on i586
+%global optflags %{optflags} -Wno-pointer-to-int-cast
+%endif
+
 # Makefiles aren't SMP clean
 make PREFIX=%{_prefix} LIBDIR=%{_libdir} LD=ld.bfd INSTALLROOT=%{buildroot}
 make apps PREFIX=%{_prefix} LIBDIR=%{_libdir} LD=ld.bfd INSTALLROOT=%{buildroot}
