@@ -38,6 +38,7 @@ sed -i -e 's,-fpic,-fpic -fuse-ld=bfd,g' Make.defaults
 %global optflags %{optflags} -Wno-error=-Wno-pointer-to-int-cast
 %endif
 
+%setup_compile_flags
 # Makefiles aren't SMP clean
 make PREFIX=%{_prefix} LIBDIR=%{_libdir} LD=ld.bfd INSTALLROOT=%{buildroot}
 make apps PREFIX=%{_prefix} LIBDIR=%{_libdir} LD=ld.bfd INSTALLROOT=%{buildroot}
