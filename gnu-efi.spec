@@ -40,7 +40,8 @@ sed -i -e 's,-fpic,-fpic -fuse-ld=bfd,g' Make.defaults
 %build
 %ifarch %{ix86}
 # (tpg) fix build on i586
-export CFLAGS=" -Wno-error=no-pointer-to-int-cast"
+export CC=gcc
+export CXX=g++
 %endif
 
 # Makefiles aren't SMP clean and do not pass our optflags
