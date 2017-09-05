@@ -5,6 +5,12 @@
 %ifarch x86_64
 %global efiarch x86_64
 %endif
+%ifarch aarch64
+%global efiarch aarch64
+%endif
+%ifarch %{arm}
+%global efiarch arm
+%endif
 %ifarch %{ix86}
 %global efiarch ia32
 %endif
@@ -21,7 +27,6 @@ Source100:	%{name}.rpmlintrc
 # grub legacy makes use of setjmp/longjmp and assumes they're in libgnuefi.a
 # so let's put them back there for now...
 Patch0:		gnu-efi-3.0v-revert-setjmp-removal.patch
-ExclusiveArch:	%{ix86} x86_64
 
 %description
 This package contains development headers and libraries for developing
@@ -35,12 +40,12 @@ sed -i -e 's,-fpic,-fpic -fuse-ld=bfd,g' Make.defaults
 %build
 %ifarch %{ix86}
 # (tpg) fix build on i586
-%global optflags %{optflags} -Wno-error=no-pointer-to-int-cast
+export CFLAGS=" -Wno-error=no-pointer-to-int-cast"
 %endif
 
-# Makefiles aren't SMP clean
-make PREFIX=%{_prefix} LIBDIR=%{_libdir} LD=ld.bfd INSTALLROOT=%{buildroot} CFLAGS="%{optflags}"
-make apps PREFIX=%{_prefix} LIBDIR=%{_libdir} LD=ld.bfd INSTALLROOT=%{buildroot} CFLAGS="%{optflags}"
+# Makefiles aren't SMP clean and do not pass our optflags
+make PREFIX=%{_prefix} LIBDIR=%{_libdir} LD=ld.bfd INSTALLROOT=%{buildroot}
+make apps PREFIX=%{_prefix} LIBDIR=%{_libdir} LD=ld.bfd INSTALLROOT=%{buildroot}
 
 %install
 make PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot} install
