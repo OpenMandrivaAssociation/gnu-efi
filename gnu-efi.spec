@@ -5,10 +5,15 @@
 %ifarch x86_64
 %global efiarch x86_64
 %endif
+%ifarch aarch64
+%global efiarch aarch64
+%endif
+%ifarch %{arm}
+%global efiarch arm
+%endif
 %ifarch %{ix86}
 %global efiarch ia32
 %endif
-
 
 Summary:	Development Libraries and headers for EFI
 Name:		gnu-efi
@@ -22,7 +27,13 @@ Source100:	%{name}.rpmlintrc
 # grub legacy makes use of setjmp/longjmp and assumes they're in libgnuefi.a
 # so let's put them back there for now...
 Patch0:		gnu-efi-3.0v-revert-setjmp-removal.patch
-ExclusiveArch:	%{ix86} x86_64
+# (tpg) patches from fedora
+Patch0002:	0002-Fix-some-types-gcc-doesn-t-like.patch
+Patch0003:	0003-Fix-arm-build-paths-in-the-makefile.patch
+Patch0004:	0004-Work-around-Werror-maybe-uninitialized-not-being-ver.patch
+Patch0005:	0005-Fix-a-sign-error-in-the-debughook-example-app.patch
+Patch0011:	0011-Nerf-Werror-pragma-away.patch
+Patch0012:	0012-Make-ia32-use-our-own-div-asm-on-gnu-C-as-well.patch
 
 %description
 This package contains development headers and libraries for developing
@@ -34,7 +45,13 @@ applications that run under EFI (Extensible Firmware Interface).
 sed -i -e 's,-fpic,-fpic -fuse-ld=bfd,g' Make.defaults
 
 %build
-# Makefiles aren't SMP clean
+%ifarch %{ix86}
+# (tpg) fix build on i586
+export CC=gcc
+export CXX=g++
+%endif
+
+# Makefiles aren't SMP clean and do not pass our optflags
 make PREFIX=%{_prefix} LIBDIR=%{_libdir} LD=ld.bfd INSTALLROOT=%{buildroot}
 make apps PREFIX=%{_prefix} LIBDIR=%{_libdir} LD=ld.bfd INSTALLROOT=%{buildroot}
 
