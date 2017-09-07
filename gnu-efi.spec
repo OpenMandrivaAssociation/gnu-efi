@@ -27,6 +27,14 @@ Source100:	%{name}.rpmlintrc
 # grub legacy makes use of setjmp/longjmp and assumes they're in libgnuefi.a
 # so let's put them back there for now...
 Patch0:		gnu-efi-3.0v-revert-setjmp-removal.patch
+# (tpg) patches from fedora
+Patch0002:	0002-Fix-some-types-gcc-doesn-t-like.patch
+Patch0003:	0003-Fix-arm-build-paths-in-the-makefile.patch
+Patch0004:	0004-Work-around-Werror-maybe-uninitialized-not-being-ver.patch
+Patch0005:	0005-Fix-a-sign-error-in-the-debughook-example-app.patch
+Patch0011:	0011-Nerf-Werror-pragma-away.patch
+Patch0012:	0012-Make-ia32-use-our-own-div-asm-on-gnu-C-as-well.patch
+Patch0014:	0001-arm64-efi-remove-pointless-dummy-.reloc-section.patch
 
 %description
 This package contains development headers and libraries for developing

@@ -1,0 +1,37 @@
+From fa85eb1b6ac4ceff1672c7152b6f842c2f2ff728 Mon Sep 17 00:00:00 2001
+From: Peter Jones <pjones@redhat.com>
+Date: Thu, 2 Feb 2017 14:31:25 -0500
+Subject: [PATCH 03/10] Fix arm build paths in the makefile
+
+Previous work was apparently done with arm-linux-gnueabi-gcc as a
+cross-builder, but our armv7 builders have native gcc with the target as
+armv7hl-linux-gnueabi, so we need to munge the arch there to get our arm
+path.
+
+Signed-off-by: Peter Jones <pjones@redhat.com>
+---
+ Make.defaults | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Make.defaults b/Make.defaults
+index 51bd7d8..e4d2ac1 100755
+--- a/Make.defaults
++++ b/Make.defaults
+@@ -62,12 +62,12 @@ OBJCOPY      := $(prefix)$(CROSS_COMPILE)objcopy
+ 
+ # Host/target identification
+ OS           := $(shell uname -s)
+-HOSTARCH     := $(shell $(HOSTCC) -dumpmachine | cut -f1 -d- | sed s,i[3456789]86,ia32,)
++HOSTARCH     := $(shell $(HOSTCC) -dumpmachine | cut -f1 -d- | sed -e s,i[3456789]86,ia32, -e 's,armv7.*,arm,' )
+ ARCH         := $(HOSTARCH)
+ 
+ # Get ARCH from the compiler if cross compiling 
+ ifneq ($(CROSS_COMPILE),)
+-  override ARCH := $(shell $(CC) -dumpmachine | cut -f1 -d-| sed s,i[3456789]86,ia32,)
++  override ARCH := $(shell $(CC) -dumpmachine | cut -f1 -d-| sed -e s,i[3456789]86,ia32, -e 's,armv7.*,arm,' )
+ endif
+ 
+ # FreeBSD (and possibly others) reports amd64 instead of x86_64
+-- 
+2.9.3
+
