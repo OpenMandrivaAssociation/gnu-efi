@@ -2,13 +2,13 @@
 %define debug_package %{nil}
 %define dirver	%(echo %{version}|sed -e 's/[a-z]//g')
 
-%ifarch x86_64
+%ifarch x86_64 znver1
 %global efiarch x86_64
 %endif
 %ifarch aarch64
 %global efiarch aarch64
 %endif
-%ifarch %{arm}
+%ifarch %{arm} armv7hnl
 %global efiarch arm
 %endif
 %ifarch %{ix86}
@@ -17,8 +17,8 @@
 
 Summary:	Development Libraries and headers for EFI
 Name:		gnu-efi
-Version:	3.0.6
-Release:	2
+Version:	3.0.8
+Release:	1
 Group:		System/Kernel and hardware
 License:	BSD
 Url:		http://sourceforge.net/projects/gnu-efi
