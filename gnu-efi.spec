@@ -1,14 +1,14 @@
 %define _disable_lto 1
 %define debug_package %{nil}
-%define dirver	%(echo %{version}|sed -e 's/[a-z]//g')
+%define dirver %(echo %{version}|sed -e 's/[a-z]//g')
 
-%ifarch x86_64
+%ifarch x86_64 znver1
 %global efiarch x86_64
 %endif
 %ifarch aarch64
 %global efiarch aarch64
 %endif
-%ifarch %{arm}
+%ifarch %{arm} armv7hnl
 %global efiarch arm
 %endif
 %ifarch %{ix86}
@@ -17,7 +17,7 @@
 
 Summary:	Development Libraries and headers for EFI
 Name:		gnu-efi
-Version:	3.0.6
+Version:	3.0.8
 Release:	1
 Group:		System/Kernel and hardware
 License:	BSD
@@ -28,12 +28,8 @@ Source100:	%{name}.rpmlintrc
 # so let's put them back there for now...
 Patch0:		gnu-efi-3.0v-revert-setjmp-removal.patch
 # (tpg) patches from fedora
-Patch0002:	0002-Fix-some-types-gcc-doesn-t-like.patch
-Patch0003:	0003-Fix-arm-build-paths-in-the-makefile.patch
-Patch0004:	0004-Work-around-Werror-maybe-uninitialized-not-being-ver.patch
-Patch0005:	0005-Fix-a-sign-error-in-the-debughook-example-app.patch
-Patch0011:	0011-Nerf-Werror-pragma-away.patch
-Patch0012:	0012-Make-ia32-use-our-own-div-asm-on-gnu-C-as-well.patch
+Patch0001:	0001-PATCH-Disable-AVX-instruction-set-on-IA32-and-x86_64.patch
+BuildRequires:	glibc-devel
 
 %description
 This package contains development headers and libraries for developing
