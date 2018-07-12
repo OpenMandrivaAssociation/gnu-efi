@@ -1,13 +1,14 @@
-From bbd65152010e04275825736f203a4bf929927a7f Mon Sep 17 00:00:00 2001
+From a46a62b12b58139c31d4288384808365c4053bf2 Mon Sep 17 00:00:00 2001
 From: Peter Jones <pjones@redhat.com>
-Date: Thu, 2 Feb 2017 14:00:59 -0500
-Subject: [PATCH 02/10] Fix some types gcc doesn't like
+Date: Tue, 13 Mar 2018 15:20:21 -0400
+Subject: [PATCH 11/25] Fix some types gcc doesn't like
 
 Most of these come from building on i386 with -Wextra, but they're still
 incorrect everywhere else; they just happen to have identical typedefs
 at other places, so the compiler doesn't care.
 
 Signed-off-by: Peter Jones <pjones@redhat.com>
+Signed-off-by: Nigel Croxon <ncroxon@redhat.com>
 ---
  apps/AllocPages.c | 2 +-
  apps/FreePages.c  | 2 +-
@@ -16,7 +17,7 @@ Signed-off-by: Peter Jones <pjones@redhat.com>
  4 files changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/apps/AllocPages.c b/apps/AllocPages.c
-index 77a082e..bb81849 100644
+index 77a082ec0a3..bb81849c26e 100644
 --- a/apps/AllocPages.c
 +++ b/apps/AllocPages.c
 @@ -116,7 +116,7 @@ efi_main (EFI_HANDLE image, EFI_SYSTEM_TABLE *systab)
@@ -29,7 +30,7 @@ index 77a082e..bb81849 100644
  	InitializeLib(image, systab);
  
 diff --git a/apps/FreePages.c b/apps/FreePages.c
-index bbf2f52..247c75d 100644
+index bbf2f52b4cf..247c75dc2be 100644
 --- a/apps/FreePages.c
 +++ b/apps/FreePages.c
 @@ -89,7 +89,7 @@ efi_main (EFI_HANDLE image, EFI_SYSTEM_TABLE *systab)
@@ -42,10 +43,10 @@ index bbf2f52..247c75d 100644
  	InitializeLib(image, systab);
  
 diff --git a/apps/route80h.c b/apps/route80h.c
-index b0b142f..723dd85 100644
+index 8df860c1232..e1f62f06824 100644
 --- a/apps/route80h.c
 +++ b/apps/route80h.c
-@@ -138,7 +138,7 @@ efi_main (EFI_HANDLE image_handle, EFI_SYSTEM_TABLE *systab)
+@@ -129,7 +129,7 @@ efi_main (EFI_HANDLE image_handle, EFI_SYSTEM_TABLE *systab)
  	lpcif.rcba &= ~1UL;
  
  	Print(L"rcba: 0x%8x\n", lpcif.rcba, lpcif.rcba);
@@ -55,7 +56,7 @@ index b0b142f..723dd85 100644
  
  	return EFI_SUCCESS;
 diff --git a/inc/efilink.h b/inc/efilink.h
-index b2ff4fa..cc5aa2d 100644
+index b2ff4fa2f87..cc5aa2dc57b 100644
 --- a/inc/efilink.h
 +++ b/inc/efilink.h
 @@ -142,7 +142,7 @@ typedef struct _LIST_ENTRY {
@@ -68,5 +69,5 @@ index b2ff4fa..cc5aa2d 100644
  //
  //  CONTAINING_RECORD - returns a pointer to the structure
 -- 
-2.9.3
+2.15.0
 
