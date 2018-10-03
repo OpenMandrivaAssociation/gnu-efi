@@ -43,7 +43,6 @@ applications that run under EFI (Extensible Firmware Interface).
 #sed -i -e 's,-fpic,-fpic -fuse-ld=bfd,g' Make.defaults
 
 %build
-%setup_compile_flags
 # (tpg) build only with gcc
 export CC=gcc
 export CXX=g++
