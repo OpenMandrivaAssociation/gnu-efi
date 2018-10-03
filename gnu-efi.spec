@@ -5,10 +5,10 @@
 %ifarch %{x86_64}
 %global efiarch x86_64
 %endif
-%ifarch aarch64
+%ifarch %{aarch64}
 %global efiarch aarch64
 %endif
-%ifarch %{arm} armv7hnl
+%ifarch %{arm}
 %global efiarch arm
 %endif
 %ifarch %{ix86}
@@ -18,7 +18,7 @@
 Summary:	Development Libraries and headers for EFI
 Name:		gnu-efi
 Version:	3.0.8
-Release:	3
+Release:	4
 Group:		System/Kernel and hardware
 License:	BSD
 Url:		http://sourceforge.net/projects/gnu-efi
@@ -41,6 +41,13 @@ applications that run under EFI (Extensible Firmware Interface).
 %autosetup -n %{name}-%{dirver} -p1
 
 #sed -i -e 's,-fpic,-fpic -fuse-ld=bfd,g' Make.defaults
+
+# Make sure we don't need an executable stack
+find . -name "*.S" |while read i; do
+	if ! grep -q .note.GNU-stack $i; then
+		echo '.section .note.GNU-stack,"",@progbits' >>$i
+	fi
+done
 
 %build
 # (tpg) build only with gcc
