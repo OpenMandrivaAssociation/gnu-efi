@@ -42,7 +42,11 @@ applications that run under EFI (Extensible Firmware Interface).
 # Make sure we don't need an executable stack
 find . -name "*.S" |while read i; do
 	if ! grep -q .note.GNU-stack $i; then
+%ifarch armv7hnl
+		echo '.section .note.GNU-stack,""' >>$i
+%else
 		echo '.section .note.GNU-stack,"",@progbits' >>$i
+%endif
 	fi
 done
 
