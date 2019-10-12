@@ -1,0 +1,12 @@
+diff -Naur gnu-efi-3.0.10/lib/print.c gnu-efi-3.0.10.tpg/lib/print.c
+--- gnu-efi-3.0.10/lib/print.c	2019-10-03 16:05:00.000000000 +0000
++++ gnu-efi-3.0.10.tpg/lib/print.c	2019-10-11 22:13:47.124387808 +0000
+@@ -1132,7 +1132,7 @@
+             case 'X':
+                 Item.Width = Item.Long ? 16 : 8;
+                 Item.Pad = '0';
+-#if __GNUC__ >= 7
++#if __GNUC__ >= 7 && __has_attribute(__fallthrough__)
+ 		__attribute__ ((fallthrough));
+ #endif
+             case 'x':

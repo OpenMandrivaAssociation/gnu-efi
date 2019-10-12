@@ -17,7 +17,7 @@
 
 Summary:	Development Libraries and headers for EFI
 Name:		gnu-efi
-Version:	3.0.9
+Version:	3.0.10
 Release:	1
 Group:		System/Kernel and hardware
 License:	BSD
@@ -25,10 +25,10 @@ Url:		http://sourceforge.net/projects/gnu-efi
 Source0:	http://freefr.dl.sourceforge.net/project/gnu-efi/gnu-efi-%{version}.tar.bz2
 Source100:	%{name}.rpmlintrc
 # (tpg) patches from fedora
-Patch0001: 0001-PATCH-Disable-AVX-instruction-set-on-IA32-and-x86_64.patch
+Patch1:		0001-PATCH-Disable-AVX-instruction-set-on-IA32-and-x86_64.patch
+Patch2:		gnu-efi-3.0.10-fallthroug.patch
 BuildRequires:	glibc-devel
-BuildRequires:	gcc
-BuildRequires:	gcc-c++
+BuildRequires:	kernel-source
 
 %description
 This package contains development headers and libraries for developing
@@ -37,30 +37,32 @@ applications that run under EFI (Extensible Firmware Interface).
 %prep
 %autosetup -n %{name}-%{dirver} -p1
 
+# (tpg) 2019-10-12 remove this so clang may compile it with success
+sed -i -e 's/-maccumulate-outgoing-args//g' Make.defaults
+# (tpg) pass -z norelro for LLD
+sed -i -e 's/build-id=sha1/build-id=sha1 -z norelro/g' Make.defaults
+# or use LD.BFD
 #sed -i -e 's,-fpic,-fpic -fuse-ld=bfd,g' Make.defaults
 
 # Make sure we don't need an executable stack
 find . -name "*.S" |while read i; do
-	if ! grep -q .note.GNU-stack $i; then
+    if ! grep -q .note.GNU-stack $i; then
 %ifarch armv7hnl
-		echo '.section .note.GNU-stack,""' >>$i
+	echo '.section .note.GNU-stack,""' >>$i
 %else
-		echo '.section .note.GNU-stack,"",@progbits' >>$i
+	echo '.section .note.GNU-stack,"",@progbits' >>$i
 %endif
-	fi
+    fi
 done
 
 %build
-# (tpg) build only with gcc
-export CC=gcc
-export CXX=g++
 
-# Makefiles aren't SMP clean and do not pass our optflags
-make PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
-make apps PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
+# Makefiles aren't SMP clean and do not pass our optflags and ldflags
+make CC=clang PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
+make apps CC=clang PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
 
 %install
-make PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot} install
+%make_install PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
 
 mkdir -p %{buildroot}%{_libdir}/gnuefi
 mv %{buildroot}/%{_libdir}/*.lds %{buildroot}/%{_libdir}/*.o %{buildroot}/%{_libdir}/gnuefi
