@@ -43,7 +43,7 @@ sed -i -e 's/-maccumulate-outgoing-args//g' Make.defaults
 sed -i -e 's/build-id=sha1/build-id=sha1 -z norelro/g' Make.defaults
 # or use LD.BFD
 %ifarch %{ix86}
-sed -i -e 's,-fpic,-fpic -fuse-ld=bfd,g' Make.defaults
+export LD=ld.bfd
 %endif
 
 # Make sure we don't need an executable stack
