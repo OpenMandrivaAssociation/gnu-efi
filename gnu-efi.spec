@@ -42,7 +42,9 @@ sed -i -e 's/-maccumulate-outgoing-args//g' Make.defaults
 # (tpg) pass -z norelro for LLD
 sed -i -e 's/build-id=sha1/build-id=sha1 -z norelro/g' Make.defaults
 # or use LD.BFD
-#sed -i -e 's,-fpic,-fpic -fuse-ld=bfd,g' Make.defaults
+%ifarcj %{ix86}
+sed -i -e 's,-fpic,-fpic -fuse-ld=bfd,g' Make.defaults
+%endif
 
 # Make sure we don't need an executable stack
 find . -name "*.S" |while read i; do
