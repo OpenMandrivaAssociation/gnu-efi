@@ -18,17 +18,16 @@
 Summary:	Development Libraries and headers for EFI
 Name:		gnu-efi
 Version:	3.0.10
-Release:	1
+Release:	2
 Group:		System/Kernel and hardware
 License:	BSD
 Url:		http://sourceforge.net/projects/gnu-efi
 Source0:	http://freefr.dl.sourceforge.net/project/gnu-efi/gnu-efi-%{version}.tar.bz2
 Source100:	%{name}.rpmlintrc
-# (tpg) patches from fedora
-Patch1:		0001-PATCH-Disable-AVX-instruction-set-on-IA32-and-x86_64.patch
 Patch2:		gnu-efi-3.0.10-fallthroug.patch
 BuildRequires:	glibc-devel
 BuildRequires:	kernel-source
+BuildRequires:	gcc
 
 %description
 This package contains development headers and libraries for developing
@@ -38,7 +37,7 @@ applications that run under EFI (Extensible Firmware Interface).
 %autosetup -n %{name}-%{dirver} -p1
 
 # (tpg) 2019-10-12 remove this so clang may compile it with success
-sed -i -e 's/-maccumulate-outgoing-args//g' Make.defaults
+#sed -i -e 's/-maccumulate-outgoing-args//g' Make.defaults
 # (tpg) pass -z norelro for LLD
 sed -i -e 's/build-id=sha1/build-id=sha1 -z norelro/g' Make.defaults
 # or use LD.BFD
@@ -60,8 +59,8 @@ done
 %build
 
 # Makefiles aren't SMP clean and do not pass our optflags and ldflags
-make CC=clang PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
-make apps CC=clang PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
+make CC=gcc HOSTCC=gcc PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
+make apps CC=gcc HOSTCC=gcc PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
 
 %install
 %make_install PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
