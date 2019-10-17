@@ -38,6 +38,7 @@ applications that run under EFI (Extensible Firmware Interface).
 %prep
 %autosetup -n %{name}-%{dirver} -p1
 
+%build
 # (tpg) pass -z norelro for LLD
 sed -i -e 's/build-id=sha1/build-id=sha1 -z norelro/g' Make.defaults
 # or use LD.BFD
@@ -58,8 +59,6 @@ find . -name "*.S" |while read i; do
     fi
 done
 
-%build
-
 # Makefiles aren't SMP clean and do not pass our optflags and ldflags
 make CC=%{__cc} HOSTCC=%{__cc} LD="$LD" PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
 make apps CC=%{__cc} HOSTCC=%{__cc} LD="$LD" PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
@@ -68,7 +67,7 @@ make apps CC=%{__cc} HOSTCC=%{__cc} LD="$LD" PREFIX=%{_prefix} LIBDIR=%{_libdir}
 %make_install PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
 
 mkdir -p %{buildroot}%{_libdir}/gnuefi
-mv %{buildroot}/%{_libdir}/*.lds %{buildroot}/%{_libdir}/*.o %{buildroot}/%{_libdir}/gnuefi
+mv %{buildroot}/%{_libdir}/*.lds %{buildroo}/%{_libdir}/*.o %{buildroot}/%{_libdir}/gnuefi
 
 mkdir -p %{buildroot}/boot/efi/EFI/openmandriva
 cp -a %{efiarch}/apps/*.efi %{buildroot}/boot/efi/EFI/openmandriva/
