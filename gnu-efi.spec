@@ -67,7 +67,7 @@ make apps CC=%{__cc} HOSTCC=%{__cc} LD="$LD" PREFIX=%{_prefix} LIBDIR=%{_libdir}
 %make_install PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
 
 mkdir -p %{buildroot}%{_libdir}/gnuefi
-mv %{buildroot}/%{_libdir}/*.lds %{buildroo}/%{_libdir}/*.o %{buildroot}/%{_libdir}/gnuefi
+mv %{buildroot}/%{_libdir}/*.lds %{buildroot}/%{_libdir}/*.o %{buildroot}/%{_libdir}/gnuefi
 
 mkdir -p %{buildroot}/boot/efi/EFI/openmandriva
 cp -a %{efiarch}/apps/*.efi %{buildroot}/boot/efi/EFI/openmandriva/
