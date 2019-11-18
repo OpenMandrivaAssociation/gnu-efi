@@ -18,7 +18,7 @@
 Summary:	Development Libraries and headers for EFI
 Name:		gnu-efi
 Version:	3.0.11
-Release:	1
+Release:	2
 Group:		System/Kernel and hardware
 License:	BSD
 Url:		http://sourceforge.net/projects/gnu-efi
@@ -40,10 +40,10 @@ applications that run under EFI (Extensible Firmware Interface).
 # (tpg) pass -z norelro for LLD
 sed -i -e 's/build-id=sha1/build-id=sha1 -z norelro/g' Make.defaults
 # or use LD.BFD
-%ifarch %{ix86}
-export LD=ld.bfd
-%else
+%ifarch %{x86_64}
 export LD=ld
+%else
+export LD=ld.bfd
 %endif
 
 # Make sure we don't need an executable stack
