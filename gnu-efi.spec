@@ -75,5 +75,4 @@ cp -a %{efiarch}/apps/*.efi %{buildroot}/boot/efi/EFI/openmandriva/
 %{_includedir}/efi
 %{_libdir}/gnuefi
 %{_libdir}/*.a
-%dir /boot/efi/EFI/openmandriva/
 %attr(0644,root,root) /boot/efi/EFI/openmandriva/*.efi
