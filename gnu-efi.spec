@@ -18,7 +18,7 @@
 Summary:	Development Libraries and headers for EFI
 Name:		gnu-efi
 Version:	3.0.12
-Release:	1
+Release:	2
 Group:		System/Kernel and hardware
 License:	BSD
 Url:		http://sourceforge.net/projects/gnu-efi
@@ -67,12 +67,12 @@ make apps CC=%{__cc} HOSTCC=%{__cc} LD="$LD" PREFIX=%{_prefix} LIBDIR=%{_libdir}
 mkdir -p %{buildroot}%{_libdir}/gnuefi
 mv %{buildroot}/%{_libdir}/*.lds %{buildroot}/%{_libdir}/*.o %{buildroot}/%{_libdir}/gnuefi
 
-mkdir -p %{buildroot}/boot/efi/EFI/openmandriva
-cp -a %{efiarch}/apps/*.efi %{buildroot}/boot/efi/EFI/openmandriva/
+# (tpg) do not install efi images on /boot
+mkdir -p %{buildroot}%{_libdir}/gnuefi/apps
+cp -a %{efiarch}/apps/*.efi %{buildroot}/%{_libdir}/gnuefi/apps
 
 %files
 %doc README.* ChangeLog
 %{_includedir}/efi
 %{_libdir}/gnuefi
 %{_libdir}/*.a
-%attr(0644,root,root) /boot/efi/EFI/openmandriva/*.efi
