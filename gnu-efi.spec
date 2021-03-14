@@ -17,8 +17,8 @@
 
 Summary:	Development Libraries and headers for EFI
 Name:		gnu-efi
-Version:	3.0.13
-Release:	1
+Version:	3.0.12
+Release:	2
 Group:		System/Kernel and hardware
 License:	BSD
 Url:		http://sourceforge.net/projects/gnu-efi
@@ -26,9 +26,8 @@ Source0:	http://freefr.dl.sourceforge.net/project/gnu-efi/gnu-efi-%{version}.tar
 Source100:	%{name}.rpmlintrc
 Patch0:		gnu-efi-3.0.10-fallthroug.patch
 Patch1:		https://sourceforge.net/p/gnu-efi/patches/70/attachment/gnu-efi-3.0.9-fix-clang-build.patch
+BuildRequires:	glibc-devel
 BuildRequires:	kernel-source
-BuildRequires:	efi-srpm-macros
-ExclusiveArch:	%{efi}
 
 %description
 This package contains development headers and libraries for developing
@@ -58,8 +57,7 @@ find . -name "*.S" |while read i; do
     fi
 done
 
-# Makefiles aren't SMP clean and do not pass
-# our optflags and ldflags as this does not link to any C library
+# Makefiles aren't SMP clean and do not pass our optflags and ldflags
 make CC=%{__cc} HOSTCC=%{__cc} LD="$LD" PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
 make apps CC=%{__cc} HOSTCC=%{__cc} LD="$LD" PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
 
