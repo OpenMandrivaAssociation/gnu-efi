@@ -26,8 +26,9 @@ Source0:	http://freefr.dl.sourceforge.net/project/gnu-efi/gnu-efi-%{version}.tar
 Source100:	%{name}.rpmlintrc
 Patch0:		gnu-efi-3.0.10-fallthroug.patch
 Patch1:		https://sourceforge.net/p/gnu-efi/patches/70/attachment/gnu-efi-3.0.9-fix-clang-build.patch
-BuildRequires:	glibc-devel
 BuildRequires:	kernel-source
+BuildRequires:	efi-srpm-macros
+ExclusiveArch:	%{efi}
 
 %description
 This package contains development headers and libraries for developing
@@ -40,11 +41,8 @@ applications that run under EFI (Extensible Firmware Interface).
 # (tpg) pass -z norelro for LLD
 sed -i -e 's/build-id=sha1/build-id=sha1 -z norelro/g' Make.defaults
 # or use LD.BFD
-%ifarch %{x86_64}
-export LD=ld
-%else
+
 export LD=ld.bfd
-%endif
 
 # Make sure we don't need an executable stack
 find . -name "*.S" |while read i; do
@@ -58,8 +56,8 @@ find . -name "*.S" |while read i; do
 done
 
 # Makefiles aren't SMP clean and do not pass our optflags and ldflags
-make CC=%{__cc} HOSTCC=%{__cc} LD="$LD" PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
-make apps CC=%{__cc} HOSTCC=%{__cc} LD="$LD" PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
+make CC=%{__cc} HOSTCC=%{__cc} LD="ld.bfd" PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
+make apps CC=%{__cc} HOSTCC=%{__cc} LD="ld.bfd" PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
 
 %install
 %make_install PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
