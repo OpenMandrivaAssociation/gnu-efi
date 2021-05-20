@@ -40,12 +40,7 @@ applications that run under EFI (Extensible Firmware Interface).
 %build
 # (tpg) pass -z norelro for LLD
 sed -i -e 's/build-id=sha1/build-id=sha1 -z norelro/g' Make.defaults
-# or use LD.BFD
-%ifarch %{x86_64}
-export LD=ld
-%else
-export LD=ld.bfd
-%endif
+export LD="ld.lld --icf=none --no-gc-sections"
 
 # Make sure we don't need an executable stack
 find . -name "*.S" |while read i; do
