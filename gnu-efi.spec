@@ -18,7 +18,7 @@
 Summary:	Development Libraries and headers for EFI
 Name:		gnu-efi
 Version:	3.0.13
-Release:	1
+Release:	2
 Group:		System/Kernel and hardware
 License:	BSD
 Url:		http://sourceforge.net/projects/gnu-efi
@@ -28,6 +28,8 @@ Patch0:		gnu-efi-3.0.10-fallthroug.patch
 Patch1:		https://sourceforge.net/p/gnu-efi/patches/70/attachment/gnu-efi-3.0.9-fix-clang-build.patch
 BuildRequires:	kernel-source
 BuildRequires:	efi-srpm-macros
+# (tpg) this is needed for ld.bfd
+BuildRequires:	binutils
 ExclusiveArch:	%{efi}
 
 %description
@@ -38,24 +40,22 @@ applications that run under EFI (Extensible Firmware Interface).
 %autosetup -n %{name}-%{dirver} -p1
 
 %build
-# (tpg) pass -z norelro for LLD
-sed -i -e 's/build-id=sha1/build-id=sha1 -z norelro/g' Make.defaults
-
 # Make sure we don't need an executable stack
 find . -name "*.S" |while read i; do
     if ! grep -q .note.GNU-stack $i; then
 %ifarch armv7hnl
-	echo '.section .note.GNU-stack,""' >>$i
+    echo '.section .note.GNU-stack,""' >>$i
 %else
-	echo '.section .note.GNU-stack,"",@progbits' >>$i
+    echo '.section .note.GNU-stack,"",@progbits' >>$i
 %endif
     fi
 done
 
 # Makefiles aren't SMP clean and do not pass
 # our optflags and ldflags as this does not link to any C library
-make CC=%{__cc} HOSTCC=%{__cc} PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
-make apps CC=%{__cc} HOSTCC=%{__cc} PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
+# (tpg) ld.lld does not uderstand custom linker script (elf_*_efi.lds), so let's hardcode to ld.bfd
+make CC=%{__cc} HOSTCC=%{__cc} LD="ld.bfd" PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
+make apps CC=%{__cc} HOSTCC=%{__cc} LD="ld.bfd" PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
 
 %install
 %make_install PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
