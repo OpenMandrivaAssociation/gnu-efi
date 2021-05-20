@@ -40,7 +40,6 @@ applications that run under EFI (Extensible Firmware Interface).
 %build
 # (tpg) pass -z norelro for LLD
 sed -i -e 's/build-id=sha1/build-id=sha1 -z norelro/g' Make.defaults
-export LD="ld.lld --icf=none --no-gc-sections"
 
 # Make sure we don't need an executable stack
 find . -name "*.S" |while read i; do
@@ -55,8 +54,8 @@ done
 
 # Makefiles aren't SMP clean and do not pass
 # our optflags and ldflags as this does not link to any C library
-make CC=%{__cc} HOSTCC=%{__cc} LD="$LD" PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
-make apps CC=%{__cc} HOSTCC=%{__cc} LD="$LD" PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
+make CC=%{__cc} HOSTCC=%{__cc} PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
+make apps CC=%{__cc} HOSTCC=%{__cc} PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
 
 %install
 %make_install PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
