@@ -1,5 +1,7 @@
+# Work around incomplete debug packages
+%global _empty_manifest_terminate_build 0
+
 %define _disable_lto 1
-%define debug_package %{nil}
 %define dirver %(echo %{version}|sed -e 's/[a-z]//g')
 
 %ifarch %{x86_64}
@@ -18,7 +20,7 @@
 Summary:	Development Libraries and headers for EFI
 Name:		gnu-efi
 Version:	3.0.14
-Release:	1
+Release:	2
 Group:		System/Kernel and hardware
 License:	BSD
 Url:		http://sourceforge.net/projects/gnu-efi
@@ -26,6 +28,7 @@ Source0:	http://freefr.dl.sourceforge.net/project/gnu-efi/gnu-efi-%{version}.tar
 Source100:	%{name}.rpmlintrc
 Patch0:		gnu-efi-3.0.10-fallthroug.patch
 Patch1:		https://sourceforge.net/p/gnu-efi/patches/70/attachment/gnu-efi-3.0.9-fix-clang-build.patch
+Patch2:		gnu-efi-bsc1182057-support-sbat-section.patch
 BuildRequires:	kernel-source
 BuildRequires:	efi-srpm-macros
 # (tpg) this is needed for ld.bfd
