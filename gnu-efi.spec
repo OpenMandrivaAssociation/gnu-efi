@@ -24,7 +24,7 @@
 Summary:	Development Libraries and headers for EFI
 Name:		gnu-efi
 Version:	3.0.14
-Release:	3
+Release:	4
 Group:		System/Kernel and hardware
 License:	BSD
 Url:		http://sourceforge.net/projects/gnu-efi
@@ -38,6 +38,7 @@ BuildRequires:	kernel-source
 BuildRequires:	efi-srpm-macros
 # (tpg) this is needed for ld.bfd
 BuildRequires:	binutils
+BuildRequires:	findutils
 ExclusiveArch:	%{efi}
 
 %description
@@ -59,7 +60,7 @@ make apps CC=%{__cc} HOSTCC=%{__cc} LD="ld.bfd" PREFIX=%{_prefix} LIBDIR=%{_libd
 
 mkdir -p %{buildroot}%{_libdir}/gnuefi
 mv %{buildroot}%{_libdir}/*.lds %{buildroot}%{_libdir}/*.o %{buildroot}%{_libdir}/gnuefi
-for i in $(ls %{buildroot}%{_libdir}/*.a); do
+for i in $(find %{buildroot}%{_libdir} -type f -name "*.a" -printf "%f\n"); do
     ln -sf %{_libdir}/$i %{buildroot}%{_libdir}/gnuefi/$i
 done
 
