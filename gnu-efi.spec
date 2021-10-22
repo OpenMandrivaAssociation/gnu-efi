@@ -24,7 +24,7 @@
 Summary:	Development Libraries and headers for EFI
 Name:		gnu-efi
 Version:	3.0.14
-Release:	2
+Release:	3
 Group:		System/Kernel and hardware
 License:	BSD
 Url:		http://sourceforge.net/projects/gnu-efi
@@ -58,7 +58,10 @@ make apps CC=%{__cc} HOSTCC=%{__cc} LD="ld.bfd" PREFIX=%{_prefix} LIBDIR=%{_libd
 %make_install PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
 
 mkdir -p %{buildroot}%{_libdir}/gnuefi
-mv %{buildroot}/%{_libdir}/*.lds %{buildroot}/%{_libdir}/*.o %{buildroot}/%{_libdir}/gnuefi
+mv %{buildroot}%{_libdir}/*.lds %{buildroot}%{_libdir}/*.o %{buildroot}%{_libdir}/gnuefi
+for i in $(ls %{buildroot}%{_libdir}/*.a); do
+    ls -ln %{_libdir}/$i %{buildroot}%{_libdir}/gnuefi/$i
+done
 
 # (tpg) do not install efi images on /boot
 mkdir -p %{buildroot}%{_libdir}/gnuefi/apps
