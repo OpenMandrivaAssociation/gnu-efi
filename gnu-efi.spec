@@ -60,7 +60,7 @@ make apps CC=%{__cc} HOSTCC=%{__cc} LD="ld.bfd" PREFIX=%{_prefix} LIBDIR=%{_libd
 mkdir -p %{buildroot}%{_libdir}/gnuefi
 mv %{buildroot}%{_libdir}/*.lds %{buildroot}%{_libdir}/*.o %{buildroot}%{_libdir}/gnuefi
 for i in $(ls %{buildroot}%{_libdir}/*.a); do
-    ls -ln %{_libdir}/$i %{buildroot}%{_libdir}/gnuefi/$i
+    ln -sf %{_libdir}/$i %{buildroot}%{_libdir}/gnuefi/$i
 done
 
 # (tpg) do not install efi images on /boot
