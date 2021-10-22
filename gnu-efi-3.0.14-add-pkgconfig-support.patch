@@ -1,0 +1,32 @@
+diff -Naur gnu-efi-3.0.14/Makefile gnu-efi-3.0.14.tpg/Makefile
+--- gnu-efi-3.0.14/Makefile	2021-08-19 16:25:25.000000000 +0000
++++ gnu-efi-3.0.14.tpg/Makefile	2021-10-22 13:33:10.277415538 +0000
+@@ -86,11 +86,27 @@
+ 			$(MAKE) -C $(OBJDIR)/$$d -f $(SRCDIR)/$$d/Makefile SRCDIR=$(SRCDIR)/$$d clean; \
+ 		fi; \
+ 	done
++	rm -f gnu-efi.pc
+ 
+-install:
++install: gnu-efi.pc
+ 	@for d in $(SUBDIRS); do \
+ 		mkdir -p $(OBJDIR)/$$d; \
+ 		$(MAKE) -C $(OBJDIR)/$$d -f $(SRCDIR)/$$d/Makefile SRCDIR=$(SRCDIR)/$$d install; done
++	mkdir -p $(INSTALLROOT)$(LIBDIR)/pkgconfig
++	$(INSTALL) -m 644 gnu-efi.pc $(INSTALLROOT)$(LIBDIR)/pkgconfig/
++
++gnu-efi.pc:
++	$(file > gnu-efi.pc,prefix=$(PREFIX))
++	$(file >> gnu-efi.pc,includedir=$(PREFIX)/include/efi)
++	$(file >> gnu-efi.pc,libdir=$(LIBDIR))
++	$(file >> gnu-efi.pc,CRT0=$(LIBDIR)/gnuefi/crt0-efi-$(ARCH).o)
++	$(file >> gnu-efi.pc,LDSCRIPT=$(LIBDIR)/gnuefi/elf_$(ARCH)_efi.lds)
++	$(file >> gnu-efi.pc,)
++	$(file >> gnu-efi.pc,Name: gnu-efi)
++	$(file >> gnu-efi.pc,Description: Develop EFI applications using the GNU toolchain and the EFI development environment.)
++	$(file >> gnu-efi.pc,Version: $(VERSION))
++	$(file >> gnu-efi.pc,Cflags: -I$(PREFIX)/include/efi -I$(PREFIX)/include/efi/protocol -I$(PREFIX)/include/efi/$(ARCH))
++	$(file >> gnu-efi.pc,Libs: -L$(LIBDIR) -lgnuefi -lefi)
+ 
+ .PHONY:	$(SUBDIRS) clean depend
+ 

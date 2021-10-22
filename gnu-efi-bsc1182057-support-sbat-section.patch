@@ -12,7 +12,7 @@ Signed-off-by: Gary Lin <glin@suse.com>
 
 diff -Naur gnu-efi-3.0.14/gnuefi/crt0-efi-aarch64.S gnu-efi-3.0.14.tpg/gnuefi/crt0-efi-aarch64.S
 --- gnu-efi-3.0.14/gnuefi/crt0-efi-aarch64.S	2021-08-19 16:25:25.000000000 +0000
-+++ gnu-efi-3.0.14.tpg/gnuefi/crt0-efi-aarch64.S	2021-10-22 10:20:44.130961446 +0000
++++ gnu-efi-3.0.14.tpg/gnuefi/crt0-efi-aarch64.S	2021-10-22 14:04:42.218612508 +0000
 @@ -31,7 +31,7 @@
  	.short 	0
  coff_header:
@@ -26,23 +26,23 @@ diff -Naur gnu-efi-3.0.14/gnuefi/crt0-efi-aarch64.S gnu-efi-3.0.14.tpg/gnuefi/cr
  	.short	0		// NumberOfRelocations  (0 for executables)
  	.short	0		// NumberOfLineNumbers  (0 for executables)
  	.long	0xc0000040	// Characteristics (section flags)
-+	.ascii  ".sbat\0\0\0"
-+	.long   _sbat_size              // VirtualSize
-+	.long   _sbat - ImageBase       // VirtualAddress
-+	.long   _sbat_size              // SizeOfRawData
-+	.long   _sbat - ImageBase       // PointerToRawData
++	.ascii	".sbat\0\0\0"
++	.long	_sbat_size		// VirtualSize
++	.long	_sbat - ImageBase	// VirtualAddress
++	.long	_sbat_size		// SizeOfRawData
++	.long	_sbat - ImageBase	// PointerToRawData
 +
-+	.long   0               // PointerToRelocations (0 for executables)
-+	.long   0               // PointerToLineNumbers (0 for executables)
-+	.short  0               // NumberOfRelocations  (0 for executables)
-+	.short  0               // NumberOfLineNumbers  (0 for executables)
-+	.long   0x40400040      // Characteristics (section flags)
++	.long	0		// PointerToRelocations (0 for executables)
++	.long	0		// PointerToLineNumbers (0 for executables)
++	.short	0		// NumberOfRelocations  (0 for executables)
++	.short	0		// NumberOfLineNumbers  (0 for executables)
++	.long	0x40400040	// Characteristics (section flags)
  
  	.align		12
  _start:
 diff -Naur gnu-efi-3.0.14/gnuefi/crt0-efi-arm.S gnu-efi-3.0.14.tpg/gnuefi/crt0-efi-arm.S
 --- gnu-efi-3.0.14/gnuefi/crt0-efi-arm.S	2021-08-19 16:25:25.000000000 +0000
-+++ gnu-efi-3.0.14.tpg/gnuefi/crt0-efi-arm.S	2021-10-22 10:22:07.000576880 +0000
++++ gnu-efi-3.0.14.tpg/gnuefi/crt0-efi-arm.S	2021-10-22 14:06:05.008210751 +0000
 @@ -31,7 +31,7 @@
  	.short 	0
  coff_header:
@@ -56,24 +56,24 @@ diff -Naur gnu-efi-3.0.14/gnuefi/crt0-efi-arm.S gnu-efi-3.0.14.tpg/gnuefi/crt0-e
  	.short	0		// NumberOfLineNumbers  (0 for executables)
  	.long	0xe0500020	// Characteristics (section flags)
  
-+	.ascii  ".sbat\0\0\0"
-+	.long   _sbat_size              // VirtualSize
-+	.long   _sbat - ImageBase       // VirtualAddress
-+	.long   _sbat_size              // SizeOfRawData
-+	.long   _sbat - ImageBase       // PointerToRawData
++	.ascii	".sbat\0\0\0"
++	.long	_sbat_size		// VirtualSize
++	.long	_sbat - ImageBase	// VirtualAddress
++	.long	_sbat_size		// SizeOfRawData
++	.long	_sbat - ImageBase	// PointerToRawData
 +
-+	.long   0               // PointerToRelocations (0 for executables)
-+	.long   0               // PointerToLineNumbers (0 for executables)
-+	.short  0               // NumberOfRelocations  (0 for executables)
-+	.short  0               // NumberOfLineNumbers  (0 for executables)
-+	.long   0x40400040      // Characteristics (section flags)
++	.long	0		// PointerToRelocations (0 for executables)
++	.long	0		// PointerToLineNumbers (0 for executables)
++	.short	0		// NumberOfRelocations  (0 for executables)
++	.short	0		// NumberOfLineNumbers  (0 for executables)
++	.long	0x40400040	// Characteristics (section flags)
 +
  _start:
  	stmfd		sp!, {r0-r2, lr}
  
 diff -Naur gnu-efi-3.0.14/gnuefi/elf_aarch64_efi.lds gnu-efi-3.0.14.tpg/gnuefi/elf_aarch64_efi.lds
 --- gnu-efi-3.0.14/gnuefi/elf_aarch64_efi.lds	2021-08-19 16:25:25.000000000 +0000
-+++ gnu-efi-3.0.14.tpg/gnuefi/elf_aarch64_efi.lds	2021-10-22 10:17:27.861869230 +0000
++++ gnu-efi-3.0.14.tpg/gnuefi/elf_aarch64_efi.lds	2021-10-22 14:01:56.459424348 +0000
 @@ -46,6 +46,15 @@
    . = ALIGN(512);
    _edata = .;
@@ -92,7 +92,7 @@ diff -Naur gnu-efi-3.0.14/gnuefi/elf_aarch64_efi.lds gnu-efi-3.0.14.tpg/gnuefi/e
    .dynsym   : { *(.dynsym) }
 diff -Naur gnu-efi-3.0.14/gnuefi/elf_arm_efi.lds gnu-efi-3.0.14.tpg/gnuefi/elf_arm_efi.lds
 --- gnu-efi-3.0.14/gnuefi/elf_arm_efi.lds	2021-08-19 16:25:25.000000000 +0000
-+++ gnu-efi-3.0.14.tpg/gnuefi/elf_arm_efi.lds	2021-10-22 10:18:02.371709975 +0000
++++ gnu-efi-3.0.14.tpg/gnuefi/elf_arm_efi.lds	2021-10-22 14:01:56.469424299 +0000
 @@ -46,6 +46,15 @@
    .rel.data : { *(.rel.data) *(.rel.data*) }
    _edata = .;
@@ -111,7 +111,7 @@ diff -Naur gnu-efi-3.0.14/gnuefi/elf_arm_efi.lds gnu-efi-3.0.14.tpg/gnuefi/elf_a
    .dynsym   : { *(.dynsym) }
 diff -Naur gnu-efi-3.0.14/gnuefi/elf_x86_64_efi.lds gnu-efi-3.0.14.tpg/gnuefi/elf_x86_64_efi.lds
 --- gnu-efi-3.0.14/gnuefi/elf_x86_64_efi.lds	2021-08-19 16:25:25.000000000 +0000
-+++ gnu-efi-3.0.14.tpg/gnuefi/elf_x86_64_efi.lds	2021-10-22 10:18:50.361488240 +0000
++++ gnu-efi-3.0.14.tpg/gnuefi/elf_x86_64_efi.lds	2021-10-22 14:01:56.469424299 +0000
 @@ -62,6 +62,16 @@
      *(.rela.stab)
    }
