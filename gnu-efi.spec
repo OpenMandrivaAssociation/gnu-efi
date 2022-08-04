@@ -24,7 +24,7 @@
 Summary:	Development Libraries and headers for EFI
 Name:		gnu-efi
 Version:	3.0.14
-Release:	4
+Release:	5
 Group:		System/Kernel and hardware
 License:	BSD
 Url:		http://sourceforge.net/projects/gnu-efi
@@ -32,7 +32,9 @@ Source0:	http://freefr.dl.sourceforge.net/project/gnu-efi/gnu-efi-%{version}.tar
 Source100:	%{name}.rpmlintrc
 Patch0:		gnu-efi-3.0.10-fallthroug.patch
 Patch1:		https://sourceforge.net/p/gnu-efi/patches/70/attachment/gnu-efi-3.0.9-fix-clang-build.patch
-Patch2:		gnu-efi-bsc1182057-support-sbat-section.patch
+# The sbat patch is BROKEN (incomptaible with PIC code).
+# Don't reactivate it unless you've fixed it up to not break fwupdate build first.
+#Patch2:	gnu-efi-bsc1182057-support-sbat-section.patch
 Patch3:		gnu-efi-3.0.14-add-pkgconfig-support.patch
 BuildRequires:	kernel-source
 BuildRequires:	efi-srpm-macros
@@ -47,6 +49,16 @@ applications that run under EFI (Extensible Firmware Interface).
 
 %prep
 %autosetup -n %{name}-%{dirver} -p1
+# Make sure we don't need an executable stack
+find . -name "*.S" |while read i; do
+	if ! grep -q .note.GNU-stack $i; then
+%ifarch armv7hnl
+		echo '.section .note.GNU-stack,""' >>$i
+%else
+		echo '.section .note.GNU-stack,"",@progbits' >>$i
+%endif
+	fi
+done
 
 %build
 # Makefiles aren't SMP clean and do not pass
