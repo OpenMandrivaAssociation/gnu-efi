@@ -36,6 +36,8 @@ Patch1:		https://sourceforge.net/p/gnu-efi/patches/70/attachment/gnu-efi-3.0.9-f
 # Don't reactivate it unless you've fixed it up to not break fwupdate build first.
 #Patch2:	gnu-efi-bsc1182057-support-sbat-section.patch
 Patch3:		gnu-efi-3.0.14-add-pkgconfig-support.patch
+# (tpg) force no executable stack
+Patch4:		gnu-efi-3.0.15-no-executable-stack.patch
 BuildRequires:	kernel-source
 BuildRequires:	efi-srpm-macros
 # (tpg) this is needed for ld.bfd
@@ -49,16 +51,6 @@ applications that run under EFI (Extensible Firmware Interface).
 
 %prep
 %autosetup -n %{name}-%{dirver} -p1
-# Make sure we don't need an executable stack
-find . -name "*.S" |while read i; do
-	if ! grep -q .note.GNU-stack $i; then
-%ifarch armv7hnl
-		echo '.section .note.GNU-stack,""' >>$i
-%else
-		echo '.section .note.GNU-stack,"",@progbits' >>$i
-%endif
-	fi
-done
 
 %build
 # Makefiles aren't SMP clean and do not pass

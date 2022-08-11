@@ -1,0 +1,12 @@
+diff -Naur gnu-efi-3.0.15/apps/Makefile gnu-efi-3.0.15.tpg/apps/Makefile
+--- gnu-efi-3.0.15/apps/Makefile	2022-08-08 15:38:33.000000000 +0000
++++ gnu-efi-3.0.15.tpg/apps/Makefile	2022-08-11 21:02:56.865327721 +0000
+@@ -52,7 +52,7 @@
+ LDSCRIPT	= $(TOPDIR)/gnuefi/elf_$(ARCH)_fbsd_efi.lds
+ endif
+ 
+-LDFLAGS		+= -shared -Bsymbolic -L../lib -L../gnuefi $(CRTOBJS)
++LDFLAGS		+= -shared -Bsymbolic -z noexecstack --no-warn-rwx-segments -L../lib -L../gnuefi $(CRTOBJS)
+ 
+ LOADLIBES	+= -lefi -lgnuefi
+ LOADLIBES	+= $(LIBGCC)
