@@ -24,7 +24,7 @@
 Summary:	Development Libraries and headers for EFI
 Name:		gnu-efi
 Version:	3.0.15
-Release:	1
+Release:	2
 Group:		System/Kernel and hardware
 License:	BSD
 Url:		http://sourceforge.net/projects/gnu-efi
@@ -56,11 +56,12 @@ applications that run under EFI (Extensible Firmware Interface).
 # Makefiles aren't SMP clean and do not pass
 # our optflags and ldflags as this does not link to any C library
 # (tpg) ld.lld does not uderstand custom linker script (elf_*_efi.lds), so let's hardcode to ld.bfd
-make CC=%{__cc} HOSTCC=%{__cc} LD="ld.bfd" PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
-make apps CC=%{__cc} HOSTCC=%{__cc} LD="ld.bfd" PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
+make CC=%{__cc} HOSTCC=%{__cc} LD="ld.bfd"
+make CC=%{__cc} HOSTCC=%{__cc} LD="ld.bfd" apps
 
 %install
-%make_install PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot}
+mkdir -p %{buildroot}%{_libdir}
+make CC=%{__cc} HOSTCC=%{__cc} LD="ld.bfd" PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot} install
 
 mkdir -p %{buildroot}%{_libdir}/gnuefi
 mv %{buildroot}%{_libdir}/*.lds %{buildroot}%{_libdir}/*.o %{buildroot}%{_libdir}/gnuefi
