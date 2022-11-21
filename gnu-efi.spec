@@ -24,7 +24,7 @@
 Summary:	Development Libraries and headers for EFI
 Name:		gnu-efi
 Version:	3.0.15
-Release:	2
+Release:	3
 Group:		System/Kernel and hardware
 License:	BSD
 Url:		http://sourceforge.net/projects/gnu-efi
@@ -72,6 +72,36 @@ done
 # (tpg) do not install efi images on /boot
 mkdir -p %{buildroot}%{_libdir}/gnuefi/apps
 cp -a %{efiarch}/apps/*.efi %{buildroot}/%{_libdir}/gnuefi/apps
+
+# (tpg) strip LTO from "LLVM IR bitcode" files
+check_convert_bitcode() {
+    printf '%s\n' "Checking for LLVM IR bitcode"
+    llvm_file_name=$(realpath ${1})
+    llvm_file_type=$(file ${llvm_file_name})
+
+    if printf '%s\n' "${llvm_file_type}" | grep -q "LLVM IR bitcode"; then
+# recompile without LTO
+    clang %{optflags} -fno-lto -Wno-unused-command-line-argument -x ir ${llvm_file_name} -c -o ${llvm_file_name}
+    elif printf '%s\n' "${llvm_file_type}" | grep -q "current ar archive"; then
+    printf '%s\n' "Unpacking ar archive ${llvm_file_name} to check for LLVM bitcode components."
+# create archive stage for objects
+    archive_stage=$(mktemp -d)
+    archive=${llvm_file_name}
+    cd ${archive_stage}
+    ar x ${archive}
+    for archived_file in $(find -not -type d); do
+        check_convert_bitcode ${archived_file}
+        printf '%s\n' "Repacking ${archived_file} into ${archive}."
+        ar r ${archive} ${archived_file}
+    done
+    ranlib ${archive}
+    cd ..
+    fi
+}
+
+for i in $(find %{buildroot} -type f -name "*.[ao]"); do
+    check_convert_bitcode ${i}
+done
 
 %files
 %doc README.* ChangeLog
