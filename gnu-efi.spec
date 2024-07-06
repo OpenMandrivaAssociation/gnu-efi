@@ -1,5 +1,5 @@
 # Work around incomplete debug packages
-%global _empty_manifest_terminate_build 0
+%undefine _debugsource_packages
 
 %global __strip %{__strip} -gDp
 
@@ -23,15 +23,15 @@
 
 Summary:	Development Libraries and headers for EFI
 Name:		gnu-efi
-Version:	3.0.15
-Release:	4
+Version:	3.0.18
+Release:	1
 Group:		System/Kernel and hardware
 License:	BSD
 Url:		http://sourceforge.net/projects/gnu-efi
 Source0:	http://freefr.dl.sourceforge.net/project/gnu-efi/gnu-efi-%{version}.tar.bz2
 Source100:	%{name}.rpmlintrc
 Patch0:		gnu-efi-3.0.10-fallthroug.patch
-Patch1:		https://sourceforge.net/p/gnu-efi/patches/70/attachment/gnu-efi-3.0.9-fix-clang-build.patch
+#Patch1:		https://sourceforge.net/p/gnu-efi/patches/70/attachment/gnu-efi-3.0.9-fix-clang-build.patch
 # The sbat patch is BROKEN (incomptaible with PIC code).
 # Don't reactivate it unless you've fixed it up to not break fwupdate build first.
 #Patch2:	gnu-efi-bsc1182057-support-sbat-section.patch

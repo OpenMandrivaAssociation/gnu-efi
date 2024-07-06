@@ -1,7 +1,7 @@
-diff -Naur gnu-efi-3.0.14/Makefile gnu-efi-3.0.14.tpg/Makefile
---- gnu-efi-3.0.14/Makefile	2021-08-19 16:25:25.000000000 +0000
-+++ gnu-efi-3.0.14.tpg/Makefile	2021-10-22 13:33:10.277415538 +0000
-@@ -86,11 +86,27 @@
+diff -up gnu-efi-3.0.18/Makefile.2~ gnu-efi-3.0.18/Makefile
+--- gnu-efi-3.0.18/Makefile.2~	2024-07-06 16:47:07.792990346 +0200
++++ gnu-efi-3.0.18/Makefile	2024-07-06 16:48:49.822112295 +0200
+@@ -88,11 +88,27 @@ clean:
  			$(MAKE) -C $(OBJDIR)/$$d -f $(SRCDIR)/$$d/Makefile SRCDIR=$(SRCDIR)/$$d clean; \
  		fi; \
  	done
@@ -9,7 +9,7 @@ diff -Naur gnu-efi-3.0.14/Makefile gnu-efi-3.0.14.tpg/Makefile
  
 -install:
 +install: gnu-efi.pc
- 	@for d in $(SUBDIRS); do \
+ 	@set -e ; for d in $(SUBDIRS); do \
  		mkdir -p $(OBJDIR)/$$d; \
  		$(MAKE) -C $(OBJDIR)/$$d -f $(SRCDIR)/$$d/Makefile SRCDIR=$(SRCDIR)/$$d install; done
 +	mkdir -p $(INSTALLROOT)$(LIBDIR)/pkgconfig
