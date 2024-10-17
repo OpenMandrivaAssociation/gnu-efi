@@ -27,7 +27,7 @@ Version:	3.0.18
 Release:	1
 Group:		System/Kernel and hardware
 License:	BSD
-Url:		http://sourceforge.net/projects/gnu-efi
+Url:		https://sourceforge.net/projects/gnu-efi
 Source0:	http://freefr.dl.sourceforge.net/project/gnu-efi/gnu-efi-%{version}.tar.bz2
 Source100:	%{name}.rpmlintrc
 Patch0:		gnu-efi-3.0.10-fallthroug.patch
