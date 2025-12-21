@@ -38,6 +38,7 @@ Patch0:		gnu-efi-3.0.10-fallthroug.patch
 Patch3:		gnu-efi-3.0.14-add-pkgconfig-support.patch
 # (tpg) force no executable stack
 Patch4:		gnu-efi-3.0.15-no-executable-stack.patch
+BuildRequires:	make
 BuildRequires:	kernel-source
 BuildRequires:	efi-srpm-macros
 # (tpg) this is needed for ld.bfd
